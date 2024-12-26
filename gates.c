@@ -8,8 +8,18 @@ float sigmoidf(float x)
     return 1.f / (1.f + expf(-x));
 }
 
+typedef float sample[3];
+
+// NAND-gate
+sample nand_train[] = {
+    {0, 0, 1},
+    {1, 0, 1},
+    {0, 1, 1},
+    {1, 1, 0},
+};
+
 // AND-gate
-float train[][3] = {
+sample and_train[] = {
     {0, 0, 0},
     {1, 0, 0},
     {0, 1, 0},
@@ -17,15 +27,25 @@ float train[][3] = {
 };
 
 // OR-gate
-/*
-float train[][3] = {
+sample or_train[] = {
     {0, 0, 0},
     {1, 0, 1},
     {0, 1, 1},
     {1, 1, 1},
 };
-*/
-#define train_count (sizeof(train)/sizeof(train[0]))
+
+// XOR-gate
+sample xor_gate[] = {
+    {0, 0, 0},
+    {1, 0, 1},
+    {0, 1, 1},
+    {1, 1, 0},
+};
+
+sample *train = and_train;
+size_t train_count = 4;
+
+//#define train_count (sizeof(train)/sizeof(train[0]))
 
 float rand_float(void){
     return (float) rand()/ (float) RAND_MAX;
@@ -62,7 +82,7 @@ int main(){
 
     for (size_t i = 0; i < 1000*1000; ++i){
         float c = cost(w1, w2, b);
-        printf("w1 = %f, w2 = %f, b = %f, c = %f\n", w1, w2, b, c);
+        //printf("w1 = %f, w2 = %f, b = %f, c = %f\n", w1, w2, b, c);
 
         float dw1 = (cost(w1 + eps, w2, b) - c)/eps;
         float dw2 = (cost(w1, w2 + eps, b) - c)/eps;
